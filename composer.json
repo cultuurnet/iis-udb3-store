@@ -4,7 +4,11 @@
     "type": "library",
     "license": "Apache-2.0",
     "authors": [],
-    "require": {},
+    "require": {
+        "doctrine/dbal": "^2.5",
+        "doctrine/migrations": "^1.4",
+        "nicolopignatelli/valueobjects": "^4.1"
+    },
     "require-dev": {
         "phpunit/phpunit": "~4.8",
         "squizlabs/php_codesniffer": "~2.3",
