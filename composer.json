@@ -1,5 +1,5 @@
 {
-    "name": "cultuurnet/iis-udb3",
+    "name": "cultuurnet/iis-udb3-store",
     "description": "A PHP library to interact with IIS-UDB3 CdbXml store.",
     "type": "library",
     "license": "Apache-2.0",
