@@ -16,11 +16,18 @@ class AbstractCommand
     protected $itemId;
 
     /**
+     * @var externalId
+     */
+    protected $externalId;
+
+    /**
      * AbstractCommand constructor.
      * @param string $itemId
+     * @param string externalId
      */
-    public function __construct($itemId)
+    public function __construct($itemId, $externalId)
     {
         $this->itemId = $itemId;
+        $this->externalId =$externalId;
     }
 }
