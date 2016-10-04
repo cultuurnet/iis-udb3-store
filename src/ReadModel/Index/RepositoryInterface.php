@@ -28,7 +28,7 @@ interface RepositoryInterface
 
     /**
      * @param string $externalId
-     * @param UUID|null $parentUuid
+     * @return UUID|null $cdbid
      */
     public function getEventCdbid($externalId);
 }
