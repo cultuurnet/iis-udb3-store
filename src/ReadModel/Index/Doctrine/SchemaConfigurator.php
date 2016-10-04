@@ -1,6 +1,6 @@
 <?php
 
-namespace CultuurNet\UDB3\ReadModel\Index\Doctrine;
+namespace CultuurNet\UDB3\IISStore\Event\ReadModel\Index;
 
 use CultuurNet\UDB3\IISStore\Doctrine\DBAL\SchemaConfiguratorInterface;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;

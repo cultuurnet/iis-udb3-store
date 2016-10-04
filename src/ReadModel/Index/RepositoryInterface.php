@@ -1,9 +1,6 @@
 <?php
 
-
-namespace CultuurNet\UDB3\IISStore\Event\ReadModel\Relations;
-
-use ValueObjects\DateTime\DateTime;
+namespace CultuurNet\UDB3\IISStore\ReadModel\Index;
 
 interface RepositoryInterface
 {
@@ -26,4 +23,10 @@ interface RepositoryInterface
      * @param DateTime $eventPublished
      */
     public function storeStatus($eventUuid, $eventCreated, $eventUpdated, $eventPublished);
+
+    /**
+     * @param string $externalId
+     * @return mixed
+     */
+    public function getEventCdbid($externalId);
 }

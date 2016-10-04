@@ -6,7 +6,7 @@
  * Time: 09:08
  */
 
-namespace CultuurNet\UDB3\IISStore\Offer\Commands;
+namespace CultuurNet\UDB3\IISStore\ReadModel\Commands;
 
 class AbstractCommand
 {
