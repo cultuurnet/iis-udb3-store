@@ -2,6 +2,8 @@
 
 namespace CultuurNet\UDB3\IISStore\ReadModel\Index;
 
+use ValueObjects\Identity\UUID;
+
 interface RepositoryInterface
 {
     /**
@@ -26,7 +28,7 @@ interface RepositoryInterface
 
     /**
      * @param string $externalId
-     * @return mixed
+     * @param UUID|null $parentUuid
      */
     public function getEventCdbid($externalId);
 }
