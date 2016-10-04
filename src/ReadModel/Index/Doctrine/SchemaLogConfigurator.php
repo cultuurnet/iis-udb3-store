@@ -10,9 +10,9 @@ use ValueObjects\String\String as StringLiteral;
 class SchemaLogConfigurator implements SchemaConfiguratorInterface
 {
     const UUID_COLUMN = 'cdbid';
-    const CREATE_COLUMN = 'cdbxml';
-    const UPDATED_COLUMN = 'cdbxml';
-    const  _COLUMN = 'cdbxml';
+    const CREATE_COLUMN = 'created';
+    const UPDATED_COLUMN = 'updated';
+    const  PUBLISHED_COLUMN = 'published';
     /**
      * @var StringLiteral
      */
@@ -37,11 +37,12 @@ class SchemaLogConfigurator implements SchemaConfiguratorInterface
         $table->addColumn(self::UUID_COLUMN, Type::GUID)
             ->setLength(36)
             ->setNotnull(true);
-        $table->addColumn(self::XML_COLUMN, Type::TEXT)
-            ->setNotnull(true);
-
-        $table->setPrimaryKey([self::UUID_COLUMN]);
-        $table->addUniqueIndex([self::UUID_COLUMN]);
+        $table->addColumn(self::CREATE_COLUMN, Type::DATETIME)
+            ->setNotnull(false);
+        $table->addColumn(self::UPDATED_COLUMN, Type::DATETIME)
+            ->setNotnull(false);
+        $table->addColumn(self::PUBLISHED_COLUMN, Type::DATETIME)
+            ->setNotnull(false);
 
         $schemaManager->createTable($table);
     }
