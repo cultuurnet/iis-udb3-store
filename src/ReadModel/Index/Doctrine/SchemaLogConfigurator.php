@@ -12,7 +12,7 @@ class SchemaLogConfigurator implements SchemaConfiguratorInterface
     const UUID_COLUMN = 'cdbid';
     const CREATE_COLUMN = 'created';
     const UPDATED_COLUMN = 'updated';
-    const  PUBLISHED_COLUMN = 'published';
+    const PUBLISHED_COLUMN = 'published';
     /**
      * @var StringLiteral
      */

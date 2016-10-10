@@ -11,6 +11,7 @@ class SchemaTextConfigurator implements SchemaConfiguratorInterface
 {
     const UUID_COLUMN = 'cdbid';
     const XML_COLUMN = 'cdbxml';
+    const IS_UPDATE_COLUMN = 'update';
 
     /**
      * @var StringLiteral
@@ -37,6 +38,8 @@ class SchemaTextConfigurator implements SchemaConfiguratorInterface
             ->setLength(36)
             ->setNotnull(true);
         $table->addColumn(self::XML_COLUMN, Type::TEXT)
+            ->setNotnull(true);
+        $table->addColumn(self::IS_UPDATE_COLUMN, Type::BOOLEAN)
             ->setNotnull(true);
 
         $table->setPrimaryKey([self::UUID_COLUMN]);
