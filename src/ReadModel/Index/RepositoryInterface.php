@@ -9,8 +9,9 @@ interface RepositoryInterface
     /**
      * @param string $eventUuid
      * @param string $eventXml
+     * @param bool $isUpdate
      */
-    public function storeEventXml($eventUuid, $eventXml);
+    public function storeEventXml($eventUuid, $eventXml, $isUpdate);
 
     /**
      * @param string $eventUuid
