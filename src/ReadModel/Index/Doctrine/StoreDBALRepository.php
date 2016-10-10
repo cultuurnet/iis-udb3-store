@@ -16,10 +16,36 @@ class StoreDBALRepository extends AbstractDBALRepository implements RepositoryIn
     /**
      * @param string $eventUuid
      * @param string $eventXml
+     * @param bool $isUpdate
      */
-    public function storeEventXml($eventUuid, $eventXml)
+    public function storeEventXml($eventUuid, $eventXml, $isUpdate)
     {
-        // TODO: Implement storeEventXml() method.
+        $queryBuilder = $this->createQueryBuilder();
+
+        if ($isUpdate) {
+            $expr = $this->getConnection()->getExpressionBuilder();
+
+            $queryBuilder->update($this->getTableName()->toNative())
+                ->where($expr->eq(SchemaTextConfigurator::UUID_COLUMN, ':uuid'))
+                ->set(SchemaTextConfigurator::UUID_COLUMN, ':uuid')
+                ->set(SchemaTextConfigurator::IS_UPDATE_COLUMN, ':update')
+                ->setParameter('uuid', $eventUuid)
+                ->setParameter('cdbxml', $eventXml)
+                ->setParameter('update', $isUpdate);
+        } else {
+            $queryBuilder->insert($this->getTableName()->toNative())
+                ->values([
+                    SchemaTextConfigurator::UUID_COLUMN => '?',
+                    SchemaTextConfigurator::XML_COLUMN => '?',
+                    SchemaTextConfigurator::IS_UPDATE_COLUMN => '?'
+                ])
+                ->setParameters([
+                    $eventUuid,
+                    $eventXml->toNativeDateTime(),
+                    $isUpdate
+                ]);
+        }
+        $queryBuilder->execute();
     }
 
     /**
@@ -53,6 +79,8 @@ class StoreDBALRepository extends AbstractDBALRepository implements RepositoryIn
                 $eventUpdated->toNativeDateTime(),
                 $eventPublished->toNativeDateTime(),
             ]);
+
+        $queryBuilder->execute();
     }
 
     /**
@@ -64,9 +92,11 @@ class StoreDBALRepository extends AbstractDBALRepository implements RepositoryIn
         $whereId = SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN . ' = ?';
 
         $queryBuilder = $this->createQueryBuilder();
-        $queryBuilder->from($this->getTableName()->toNative())
-            ->select(SchemaRelationsConfigurator::UUID_COLUMN)
+        $queryBuilder->select(SchemaRelationsConfigurator::UUID_COLUMN)
+            ->from($this->getTableName()-toNative())
             ->where($whereId)
             ->setParameter([$externalId]);
+
+        return $this->getResult($queryBuilder);
     }
 }
