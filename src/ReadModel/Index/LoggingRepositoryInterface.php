@@ -14,5 +14,4 @@ interface LoggingRepositoryInterface
      * @param DateTime\DateTime $eventPublished
      */
     public function storeStatus($eventUuid, $eventCreated, $eventUpdated, $eventPublished);
-
 }

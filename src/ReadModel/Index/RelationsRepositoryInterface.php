@@ -7,11 +7,9 @@ use ValueObjects\String\String as StringLiteral;
 
 interface RelationsRepositoryInterface
 {
-
     /**
      * @param UUID $eventUuid
      * @param StringLiteral $externalId
      */
     public function storeRelations($eventUuid, $externalId);
-
 }
