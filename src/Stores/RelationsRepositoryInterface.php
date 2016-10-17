@@ -12,4 +12,11 @@ interface RelationsRepositoryInterface
      * @param StringLiteral $externalId
      */
     public function storeRelations(UUID $eventUuid, StringLiteral $externalId);
+
+
+    /**
+     * @param StringLiteral $externalId
+     * @return UUID|null $cdbid
+     */
+    public function getEventCdbid(StringLiteral $externalId);
 }

@@ -48,7 +48,7 @@ class StoreRepository implements RepositoryInterface
      */
     public function getEventCdbid(StringLiteral $externalId)
     {
-        return $this->xmlRepository->getEventCdbid($externalId);
+        return $this->relationsRepository->getEventCdbid($externalId);
     }
 
     public function storeRelations(UUID $eventUuid, StringLiteral $externalId)

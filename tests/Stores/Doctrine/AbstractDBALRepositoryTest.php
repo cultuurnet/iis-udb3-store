@@ -3,27 +3,76 @@
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
-use CultuurNet\UDB3\IISStore\Stores\Doctrine\SchemaLogConfigurator;
+use Doctrine\DBAL\Query\QueryBuilder;
 use ValueObjects\String\String as StringLiteral;
 
-abstract class BaseDBALRepositoryTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractBaseDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     use DBALTestConnectionTrait;
 
     /**
      * @var StringLiteral
      */
-    private $tableName;
+    protected $tableName;
+
+    /**
+     * @var AbstractDBALRepository
+     */
+    private $abstractDBALRepository;
 
     protected function setUp()
     {
-        $this->tableName = new StringLiteral('test_logging');
 
-        $schemaConfigurator = new SchemaLogConfigurator($this->tableName);
+    }
 
-        $schemaManager = $this->getConnection()->getSchemaManager();
+    /**
+     * @param string $tableName
+     * @param array $rows
+     */
+    private function insertTableData($tableName, $rows)
+    {
+        $q = $this->getConnection()->createQueryBuilder();
 
-        $schemaConfigurator->configure($schemaManager);
+        $schema = $this->getConnection()->getSchemaManager()->createSchema();
+
+        $columns = $schema
+            ->getTable($tableName)
+            ->getColumns();
+
+        $values = [];
+        foreach ($columns as $column) {
+            $values[$column->getName()] = '?';
+        }
+
+        $q->insert($tableName)
+            ->values($values);
+
+        foreach ($rows as $row) {
+            $parameters = [];
+            foreach (array_keys($values) as $columnName) {
+                $parameters[] = $row->$columnName;
+            }
+
+            $q->setParameters($parameters);
+
+            $q->execute();
+        }
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function createQueryBuilder()
+    {
+        return $this->connection->createQueryBuilder();
+    }
+
+    /**
+     * @return StringLiteral
+     */
+    public function getTableName()
+    {
+        return $this->tableName;
     }
 
     /**
@@ -31,10 +80,6 @@ abstract class BaseDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_stores_a_connection()
     {
-        $this->assertEquals(
-            $this->connection,
-            $this->abstractDBALRepository->getConnection()
-        );
     }
 
     /**
@@ -42,19 +87,23 @@ abstract class BaseDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_stores_a_table_name()
     {
-        $this->assertEquals(
-            $this->tableName,
-            $this-> abstractDBALRepository->getTableName()
-        );
     }
 
     /**
-     * @test
+     * @param array $expectedData
+     * @param string $tableName
      */
-    public function it_creates_a_query_builder()
+    private function assertTableData($expectedData, $tableName)
     {
-        $this->assertNotNull(
-            $this->abstractDBALRepository->createQueryBuilder()
+        $expectedData = array_values($expectedData);
+
+        $results = $this->getConnection()->executeQuery('SELECT * from ' . $tableName);
+
+        $actualData = $results->fetchAll(PDO::FETCH_OBJ);
+
+        $this->assertEquals(
+            $expectedData,
+            $actualData
         );
     }
 }

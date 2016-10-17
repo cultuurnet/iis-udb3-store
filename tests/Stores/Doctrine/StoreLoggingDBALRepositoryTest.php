@@ -2,8 +2,20 @@
 
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
-class StoreLoggingDBALRepositoryTest extends \PHPUnit_Framework_TestCase
+use \ValueObjects\String\String as StringLiteral;
+
+class StoreLoggingDBALRepositoryTest extends AbstractBaseDBALRepositoryTest
 {
+    protected function setUp()
+    {
+        $this->tableName = new StringLiteral('test_logging');
+        $schemaConfigurator = new SchemaLogConfigurator($this->tableName);
+        $schemaManager = $this->getConnection()->getSchemaManager();
+        $schemaConfigurator->configure($schemaManager);
+
+        parent::setUp();
+    }
+
     /**
      * @test
      */

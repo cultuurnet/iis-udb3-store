@@ -13,10 +13,4 @@ interface XmlRepositoryInterface
      * @param bool $isUpdate
      */
     public function storeEventXml(UUID $eventUuid, StringLiteral $eventXml, $isUpdate);
-
-    /**
-     * @param StringLiteral $externalId
-     * @return UUID|null $cdbid
-     */
-    public function getEventCdbid(StringLiteral $externalId);
 }

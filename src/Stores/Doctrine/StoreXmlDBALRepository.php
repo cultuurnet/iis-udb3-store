@@ -44,20 +44,5 @@ class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlReposi
         $queryBuilder->execute();
     }
 
-    /**
-     * @param StringLiteral $externalId
-     * @return UUID|null $cdbid
-     */
-    public function getEventCdbid(StringLiteral $externalId)
-    {
-        $whereId = SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN . ' = ?';
 
-        $queryBuilder = $this->createQueryBuilder();
-        $queryBuilder->select(SchemaRelationsConfigurator::UUID_COLUMN)
-            ->from($this->getTableName()-toNative())
-            ->where($whereId)
-            ->setParameter([$externalId]);
-
-        return $this->getResult($queryBuilder);
-    }
 }
