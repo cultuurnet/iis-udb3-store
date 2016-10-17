@@ -1,6 +1,6 @@
 <?php
 
-namespace CultuurNet\UDB3\IISStore\RStores\Doctrine;
+namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\Doctrine\DBAL\SchemaConfiguratorInterface;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;

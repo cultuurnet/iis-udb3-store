@@ -1,6 +1,6 @@
 <?php
 
-namespace CultuurNet\UDB3\IISStore\ReadModel\Index;
+namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {
