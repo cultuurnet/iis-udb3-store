@@ -1,6 +1,6 @@
 <?php
 
-namespace CultuurNet\UDB3\IISStore\ReadModel\Index;
+namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;

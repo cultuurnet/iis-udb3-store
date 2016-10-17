@@ -1,26 +1,25 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jonas
- * Date: 04.10.16
- * Time: 11:43
- */
 
-namespace CultuurNet\UDB3\IISStore\ReadModel\Index;
+namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
+use CultuurNet\UDB3\IISStore\Stores\LoggingRepositoryInterface;
 use ValueObjects\DateTime\DateTime;
 use ValueObjects\Identity\UUID;
 
 class StoreLoggingDBALRepository extends AbstractDBALRepository implements LoggingRepositoryInterface
 {
     /**
-     * @param string $eventUuid
+     * @param UUID $eventUuid
      * @param DateTime $eventCreated
      * @param DateTime $eventUpdated
      * @param DateTime $eventPublished
      */
-    public function storeStatus($eventUuid, $eventCreated, $eventUpdated, $eventPublished)
-    {
+    public function storeStatus(
+        UUID $eventUuid,
+        DateTime $eventCreated,
+        DateTime $eventUpdated,
+        DateTime $eventPublished
+    ) {
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->insert($this->getTableName()->toNative())
             ->values([

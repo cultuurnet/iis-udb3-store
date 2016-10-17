@@ -1,18 +1,18 @@
 <?php
 
-namespace CultuurNet\UDB3\IISStore\ReadModel\Index;
+namespace CultuurNet\UDB3\IISStore\RStores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\Doctrine\DBAL\SchemaConfiguratorInterface;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Types\Type;
 use ValueObjects\String\String as StringLiteral;
 
-class SchemaTextConfigurator implements SchemaConfiguratorInterface
+class SchemaLogConfigurator implements SchemaConfiguratorInterface
 {
     const UUID_COLUMN = 'cdbid';
-    const XML_COLUMN = 'cdbxml';
-    const IS_UPDATE_COLUMN = 'update';
-
+    const CREATE_COLUMN = 'created';
+    const UPDATED_COLUMN = 'updated';
+    const PUBLISHED_COLUMN = 'published';
     /**
      * @var StringLiteral
      */
@@ -37,13 +37,12 @@ class SchemaTextConfigurator implements SchemaConfiguratorInterface
         $table->addColumn(self::UUID_COLUMN, Type::GUID)
             ->setLength(36)
             ->setNotnull(true);
-        $table->addColumn(self::XML_COLUMN, Type::TEXT)
-            ->setNotnull(true);
-        $table->addColumn(self::IS_UPDATE_COLUMN, Type::BOOLEAN)
-            ->setNotnull(true);
-
-        $table->setPrimaryKey([self::UUID_COLUMN]);
-        $table->addUniqueIndex([self::UUID_COLUMN]);
+        $table->addColumn(self::CREATE_COLUMN, Type::DATETIME)
+            ->setNotnull(false);
+        $table->addColumn(self::UPDATED_COLUMN, Type::DATETIME)
+            ->setNotnull(false);
+        $table->addColumn(self::PUBLISHED_COLUMN, Type::DATETIME)
+            ->setNotnull(false);
 
         $schemaManager->createTable($table);
     }

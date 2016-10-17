@@ -1,24 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jonas
- * Date: 04.10.16
- * Time: 11:43
- */
 
-namespace CultuurNet\UDB3\IISStore\ReadModel\Index;
+namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
+use CultuurNet\UDB3\IISStore\Stores\XmlRepositoryInterface;
 use ValueObjects\DateTime\DateTime;
 use ValueObjects\Identity\UUID;
+use ValueObjects\String\String as StringLiteral;
 
 class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlRepositoryInterface
 {
     /**
-     * @param string $eventUuid
-     * @param string $eventXml
+     * @param UUID $eventUuid
+     * @param StringLiteral $eventXml
      * @param bool $isUpdate
      */
-    public function storeEventXml($eventUuid, $eventXml, $isUpdate)
+    public function storeEventXml(UUID $eventUuid, StringLiteral $eventXml, $isUpdate)
     {
         $queryBuilder = $this->createQueryBuilder();
 
@@ -49,10 +45,10 @@ class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlReposi
     }
 
     /**
-     * @param string $externalId
+     * @param StringLiteral $externalId
      * @return UUID|null $cdbid
      */
-    public function getEventCdbid($externalId)
+    public function getEventCdbid(StringLiteral $externalId)
     {
         $whereId = SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN . ' = ?';
 

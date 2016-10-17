@@ -1,16 +1,17 @@
 <?php
 
-namespace CultuurNet\UDB3\IISStore\ReadModel\Index;
+namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\Doctrine\DBAL\SchemaConfiguratorInterface;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Types\Type;
 use ValueObjects\String\String as StringLiteral;
 
-class SchemaRelationsConfigurator implements SchemaConfiguratorInterface
+class SchemaTextConfigurator implements SchemaConfiguratorInterface
 {
     const UUID_COLUMN = 'cdbid';
-    const EXTERNAL_ID_COLUMN = 'external_id';
+    const XML_COLUMN = 'cdbxml';
+    const IS_UPDATE_COLUMN = 'update';
 
     /**
      * @var StringLiteral
@@ -36,11 +37,13 @@ class SchemaRelationsConfigurator implements SchemaConfiguratorInterface
         $table->addColumn(self::UUID_COLUMN, Type::GUID)
             ->setLength(36)
             ->setNotnull(true);
-        $table->addColumn(self::EXTERNAL_ID_COLUMN, Type::TEXT)
+        $table->addColumn(self::XML_COLUMN, Type::TEXT)
+            ->setNotnull(true);
+        $table->addColumn(self::IS_UPDATE_COLUMN, Type::BOOLEAN)
             ->setNotnull(true);
 
+        $table->setPrimaryKey([self::UUID_COLUMN]);
         $table->addUniqueIndex([self::UUID_COLUMN]);
-        $table->addUniqueIndex([self::EXTERNAL_ID_COLUMN]);
 
         $schemaManager->createTable($table);
     }
