@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
+use phpDocumentor\Reflection\Types\Array_;
 use ValueObjects\Identity\UUID;
 use \ValueObjects\String\String as StringLiteral;
 
@@ -30,6 +31,11 @@ class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $storeRelationsDBALRepository;
 
+    /**
+     * @var array
+     */
+    private $storedRelationRow;
+
     protected function setUp()
     {
         $this->tableName = new StringLiteral('test_relation');
@@ -45,19 +51,35 @@ class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getConnection(),
             $this->tableName
         );
-    }
 
-    /**
-     * @test
-     */
-    public function it_stores_a_relation()
-    {
         $this->storeRelationsDBALRepository->storeRelations(
             $this->cdbid,
             $this->external_id
         );
 
-//        $storedRelation = $this->getStoredRelation();
+        $this->storedRelationRow = $this->getStoredRelation();
+    }
+
+    /**
+     * @test
+     */
+    public function it_stores_the_uuid()
+    {
+        $this->assertEquals(
+            $this->storedRelationRow[SchemaRelationsConfigurator::UUID_COLUMN],
+            $this->cdbid
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_stores_the_external_id()
+    {
+        $this->assertEquals(
+            $this->storedRelationRow[SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN],
+            $this->external_id
+        );
     }
 
     /**
@@ -70,6 +92,6 @@ class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
         $statement = $this->connection->executeQuery($sql);
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        return $row[1];
+        return $row;
     }
 }
