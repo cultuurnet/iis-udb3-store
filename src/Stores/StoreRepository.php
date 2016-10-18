@@ -63,7 +63,7 @@ class StoreRepository implements RepositoryInterface
      * @param DateTime $eventPublished
      */
     public function storeStatus(
-        UUId $eventUuid,
+        UUID $eventUuid,
         DateTime $eventCreated,
         DateTime $eventUpdated,
         DateTime $eventPublished
