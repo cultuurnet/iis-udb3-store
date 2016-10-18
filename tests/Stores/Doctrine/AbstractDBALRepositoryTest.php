@@ -2,18 +2,21 @@
 
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
-use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\DriverManager;
 use ValueObjects\String\String as StringLiteral;
 
-abstract class AbstractBaseDBALRepositoryTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {
-    use DBALTestConnectionTrait;
+    /**
+     * @var Connection
+     */
+    private $connection;
 
     /**
      * @var StringLiteral
      */
-    protected $tableName;
+    private $tableName;
 
     /**
      * @var AbstractDBALRepository
@@ -22,57 +25,21 @@ abstract class AbstractBaseDBALRepositoryTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
+        $this->connection = DriverManager::getConnection(
+            [
+                'url' => 'sqlite:///:memory:',
+            ]
+        );
 
-    }
+        $this->tableName = new StringLiteral('tableName');
 
-    /**
-     * @param string $tableName
-     * @param array $rows
-     */
-    private function insertTableData($tableName, $rows)
-    {
-        $q = $this->getConnection()->createQueryBuilder();
-
-        $schema = $this->getConnection()->getSchemaManager()->createSchema();
-
-        $columns = $schema
-            ->getTable($tableName)
-            ->getColumns();
-
-        $values = [];
-        foreach ($columns as $column) {
-            $values[$column->getName()] = '?';
-        }
-
-        $q->insert($tableName)
-            ->values($values);
-
-        foreach ($rows as $row) {
-            $parameters = [];
-            foreach (array_keys($values) as $columnName) {
-                $parameters[] = $row->$columnName;
-            }
-
-            $q->setParameters($parameters);
-
-            $q->execute();
-        }
-    }
-
-    /**
-     * @return QueryBuilder
-     */
-    public function createQueryBuilder()
-    {
-        return $this->connection->createQueryBuilder();
-    }
-
-    /**
-     * @return StringLiteral
-     */
-    public function getTableName()
-    {
-        return $this->tableName;
+        $this->abstractDBALRepository = $this->getMockForAbstractClass(
+            AbstractDBALRepository::class,
+            [
+                $this->connection,
+                $this->tableName,
+            ]
+        );
     }
 
     /**
@@ -80,6 +47,10 @@ abstract class AbstractBaseDBALRepositoryTest extends \PHPUnit_Framework_TestCas
      */
     public function it_stores_a_connection()
     {
+        $this->assertEquals(
+            $this->connection,
+            $this->abstractDBALRepository->getConnection()
+        );
     }
 
     /**
@@ -87,23 +58,19 @@ abstract class AbstractBaseDBALRepositoryTest extends \PHPUnit_Framework_TestCas
      */
     public function it_stores_a_table_name()
     {
+        $this->assertEquals(
+            $this->tableName,
+            $this->abstractDBALRepository->getTableName()
+        );
     }
 
     /**
-     * @param array $expectedData
-     * @param string $tableName
+     * @test
      */
-    private function assertTableData($expectedData, $tableName)
+    public function it_creates_a_query_builder()
     {
-        $expectedData = array_values($expectedData);
-
-        $results = $this->getConnection()->executeQuery('SELECT * from ' . $tableName);
-
-        $actualData = $results->fetchAll(PDO::FETCH_OBJ);
-
-        $this->assertEquals(
-            $expectedData,
-            $actualData
+        $this->assertNotNull(
+            $this->abstractDBALRepository->createQueryBuilder()
         );
     }
 }

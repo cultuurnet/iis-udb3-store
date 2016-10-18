@@ -2,12 +2,19 @@
 
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
-use CultuurNet\UDB3\IISStore\Stores\XmlRepositoryInterface;
+use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
 use ValueObjects\Identity\UUID;
 use \ValueObjects\String\String as StringLiteral;
 
-class StoreXmlDBALRepositoryTest extends AbstractBaseDBALRepositoryTest implements XmlRepositoryInterface
+class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    use DBALTestConnectionTrait;
+
+    /**
+     * @var StringLiteral
+     */
+    private $tableName;
+
     /**
      * @var UUID
      */
@@ -23,9 +30,15 @@ class StoreXmlDBALRepositoryTest extends AbstractBaseDBALRepositoryTest implemen
      */
     private $isUpdate;
 
+    /**
+     * @var StoreXmlDBALRepository
+     */
+    private $storeXmlDBALRepository;
+
     protected function setUp()
     {
         $this->tableName = new StringLiteral('test_xml');
+
         $schemaConfigurator = new SchemaLogConfigurator($this->tableName);
         $schemaManager = $this->getConnection()->getSchemaManager();
         $schemaConfigurator->configure($schemaManager);
@@ -36,70 +49,37 @@ class StoreXmlDBALRepositoryTest extends AbstractBaseDBALRepositoryTest implemen
             . '<event>TODO</event>'
             . '</cdbxml>'
         );
-        $this->isUpdate = false;
-
-        $this->storeEventXml($this->cdbid, $this->eventXml, $this->isUpdate);
-
-        parent::setUp();
-    }
-
-    /**
-     * @param StringLiteral $externalId
-     * @return UUID|null $cdbid
-     */
-    public function getEventCdbid(StringLiteral $externalId)
-    {
-        $whereId = SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN . ' = ?';
-
-        $queryBuilder = $this->createQueryBuilder();
-        $queryBuilder->select(SchemaRelationsConfigurator::UUID_COLUMN)
-            ->from($this->getTableName()-toNative())
-            ->where($whereId)
-            ->setParameter([$externalId]);
-
-        return $this->getResult($queryBuilder);
-    }
-
-    /**
-     * @param UUID $eventUuid
-     * @param StringLiteral $eventXml
-     * @param bool $isUpdate
-     */
-    public function storeEventXml(UUID $eventUuid, StringLiteral $eventXml, $isUpdate)
-    {
-        $queryBuilder = $this->createQueryBuilder();
-
-        if ($isUpdate) {
-            $expr = $this->getConnection()->getExpressionBuilder();
-
-            $queryBuilder->update($this->getTableName()->toNative())
-                ->where($expr->eq(SchemaTextConfigurator::UUID_COLUMN, ':uuid'))
-                ->set(SchemaTextConfigurator::UUID_COLUMN, ':uuid')
-                ->set(SchemaTextConfigurator::IS_UPDATE_COLUMN, ':update')
-                ->setParameter('uuid', $eventUuid)
-                ->setParameter('cdbxml', $eventXml)
-                ->setParameter('update', $isUpdate);
-        } else {
-            $queryBuilder->insert($this->getTableName()->toNative())
-                ->values([
-                    SchemaTextConfigurator::UUID_COLUMN => '?',
-                    SchemaTextConfigurator::XML_COLUMN => '?',
-                    SchemaTextConfigurator::IS_UPDATE_COLUMN => '?'
-                ])
-                ->setParameters([
-                    $eventUuid,
-                    $eventXml,
-                    $isUpdate
-                ]);
-        }
-        $queryBuilder->execute();
+        
+        $this->storeXmlDBALRepository = new StoreXmlDBALRepository(
+            $this->getConnection(),
+            $this->tableName
+        );
     }
 
     /**
      * @test
      */
-    public function it_should_store_an_xml()
+    public function it_stores_an_xml()
     {
-       // echo $this->getEventCdbid();
+        $this->storeXmlDBALRepository->storeEventXml(
+            $this->cdbid,
+            $this->eventXml,
+            $this->isUpdate
+        );
+
+        $storedXml = $this->getStoredXml();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getStoredXml()
+    {
+        $sql = 'SELECT * FROM ' . $this->tableName;
+
+        $statement = $this->connection->executeQuery($sql);
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+
+        return $row[1];
     }
 }

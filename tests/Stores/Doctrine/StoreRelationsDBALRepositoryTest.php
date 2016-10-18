@@ -2,18 +2,14 @@
 
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
-use \ValueObjects\String\String as StringLiteral;
+use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
 
-class StoreRelationsDBALRepositoryTest extends AbstractBaseDBALRepositoryTest
+class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    use DBALTestConnectionTrait;
+
     protected function setUp()
     {
-        $this->tableName = new StringLiteral('test_relations');
-        $schemaConfigurator = new SchemaLogConfigurator($this->tableName);
-        $schemaManager = $this->getConnection()->getSchemaManager();
-        $schemaConfigurator->configure($schemaManager);
-
-        parent::setUp();
     }
 
     /**
