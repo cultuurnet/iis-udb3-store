@@ -61,11 +61,11 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_stores_an_xml()
     {
-        $this->storeXmlDBALRepository->storeEventXml(
-            $this->cdbid,
-            $this->eventXml,
-            false
-        );
+//        $this->storeXmlDBALRepository->storeEventXml(
+//            $this->cdbid,
+//            $this->eventXml,
+//            false
+//        );
 
         //$storedXml = $this->getStoredXml();
     }
@@ -75,11 +75,11 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_updates_an_xml()
     {
-        $this->storeXmlDBALRepository->storeEventXml(
-            $this->cdbid,
-            $this->eventXml,
-            true
-        );
+//        $this->storeXmlDBALRepository->storeEventXml(
+//            $this->cdbid,
+//            $this->eventXml,
+//            true
+//        );
 
         //$storedXml = $this->getStoredXml();
     }

@@ -28,7 +28,7 @@ class StoreRepository implements RepositoryInterface
     public function __construct()
     {
         $this->loggingRepository = new StoreLoggingDBALRepository();
-        $this->relationsRepository =new StoreRelationsDBALRepository();
+        $this->relationsRepository = new StoreRelationsDBALRepository();
         $this->xmlRepository = new StoreXmlDBALRepository();
     }
 

@@ -44,6 +44,4 @@ class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlReposi
         }
         $queryBuilder->execute();
     }
-
-
 }
