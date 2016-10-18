@@ -36,7 +36,7 @@ class StoreXmlDBALRepositoryTest extends AbstractBaseDBALRepositoryTest implemen
             . '<event>TODO</event>'
             . '</cdbxml>'
         );
-        $this->isUpdate =true;
+        $this->isUpdate = false;
 
         $this->storeEventXml($this->cdbid, $this->eventXml, $this->isUpdate);
 
@@ -88,7 +88,7 @@ class StoreXmlDBALRepositoryTest extends AbstractBaseDBALRepositoryTest implemen
                 ])
                 ->setParameters([
                     $eventUuid,
-                    $eventXml->toNativeDateTime(),
+                    $eventXml,
                     $isUpdate
                 ]);
         }
