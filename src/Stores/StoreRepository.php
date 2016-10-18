@@ -33,9 +33,7 @@ class StoreRepository implements RepositoryInterface
     }
 
     /**
-     * @param UUID $eventUuid
-     * @param StringLiteral $eventXml
-     * @param bool $isUpdate
+     * @inheritdoc
      */
     public function storeEventXml(UUID $eventUuid, StringLiteral $eventXml, $isUpdate)
     {
@@ -43,27 +41,27 @@ class StoreRepository implements RepositoryInterface
     }
 
     /**
-     * @param StringLiteral $externalId
-     * @return UUID|null $cdbid
+     * @inheritdoc
      */
     public function getEventCdbid(StringLiteral $externalId)
     {
         return $this->relationsRepository->getEventCdbid($externalId);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function storeRelations(UUID $eventUuid, StringLiteral $externalId)
     {
         return $this->relationsRepository->storeRelations($eventUuid, $externalId);
     }
 
     /**
-     * @param UUID $eventUuid
-     * @param DateTime $eventCreated
-     * @param DateTime $eventUpdated
-     * @param DateTime $eventPublished
+    /**
+     * @inheritdoc
      */
     public function storeStatus(
-        UUId $eventUuid,
+        UUID $eventUuid,
         DateTime $eventCreated,
         DateTime $eventUpdated,
         DateTime $eventPublished
