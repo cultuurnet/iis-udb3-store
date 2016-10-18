@@ -24,9 +24,10 @@ class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlReposi
             $queryBuilder->update($this->getTableName()->toNative())
                 ->where($expr->eq(SchemaTextConfigurator::UUID_COLUMN, ':uuid'))
                 ->set(SchemaTextConfigurator::UUID_COLUMN, ':uuid')
+                ->set(SchemaTextConfigurator::XML_COLUMN, ':cdbxml')
                 ->set(SchemaTextConfigurator::IS_UPDATE_COLUMN, ':update')
-                ->setParameter('uuid', $eventUuid)
-                ->setParameter('cdbxml', $eventXml)
+                ->setParameter('uuid', $eventUuid->toNative())
+                ->setParameter('cdbxml', $eventXml->toNative())
                 ->setParameter('update', $isUpdate);
         } else {
             $queryBuilder->insert($this->getTableName()->toNative())
@@ -36,8 +37,8 @@ class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlReposi
                     SchemaTextConfigurator::IS_UPDATE_COLUMN => '?'
                 ])
                 ->setParameters([
-                    $eventUuid,
-                    $eventXml->toNativeDateTime(),
+                    $eventUuid->toNative(),
+                    $eventXml->toNative(),
                     $isUpdate
                 ]);
         }

@@ -49,6 +49,7 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
             . '<event>TODO</event>'
             . '</cdbxml>'
         );
+        $this->isUpdate = true;
         
         $this->storeXmlDBALRepository = new StoreXmlDBALRepository(
             $this->getConnection(),
@@ -67,7 +68,7 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->isUpdate
         );
 
-        $storedXml = $this->getStoredXml();
+        //$storedXml = $this->getStoredXml();
     }
 
     /**

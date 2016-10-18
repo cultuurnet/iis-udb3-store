@@ -29,7 +29,7 @@ class StoreRepository implements RepositoryInterface
     {
         $this->loggingRepository = new StoreLoggingDBALRepository();
         $this->relationsRepository =new StoreRelationsDBALRepository();
-        $this->xmlRepository =new StoreXmlDBALRepository();
+        $this->xmlRepository = new StoreXmlDBALRepository();
     }
 
     /**
