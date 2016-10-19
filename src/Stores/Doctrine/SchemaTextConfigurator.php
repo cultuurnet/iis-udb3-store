@@ -11,7 +11,7 @@ class SchemaTextConfigurator implements SchemaConfiguratorInterface
 {
     const UUID_COLUMN = 'cdbid';
     const XML_COLUMN = 'cdbxml';
-    const IS_UPDATE_COLUMN = 'update';
+    const IS_UPDATE_COLUMN = 'update_col';
 
     /**
      * @var StringLiteral
