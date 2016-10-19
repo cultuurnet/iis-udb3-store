@@ -39,7 +39,7 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->tableName = new StringLiteral('test_xml');
 
-        $schemaConfigurator = new SchemaLogConfigurator($this->tableName);
+        $schemaConfigurator = new SchemaTextConfigurator($this->tableName);
         $schemaManager = $this->getConnection()->getSchemaManager();
         $schemaConfigurator->configure($schemaManager);
 
@@ -49,7 +49,7 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
             . '<event>TODO</event>'
             . '</cdbxml>'
         );
-        
+
         $this->storeXmlDBALRepository = new StoreXmlDBALRepository(
             $this->getConnection(),
             $this->tableName
@@ -61,11 +61,11 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_stores_an_xml()
     {
-//        $this->storeXmlDBALRepository->storeEventXml(
-//            $this->cdbid,
-//            $this->eventXml,
-//            false
-//        );
+        $this->storeXmlDBALRepository->storeEventXml(
+            $this->cdbid,
+            $this->eventXml,
+            false
+        );
 
         //$storedXml = $this->getStoredXml();
     }
