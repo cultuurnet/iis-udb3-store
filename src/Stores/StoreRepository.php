@@ -2,8 +2,6 @@
 
 namespace CultuurNet\UDB3\IISStore\Stores;
 
-use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
-use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreRelationsDBALRepository;
 use ValueObjects\DateTime\DateTime;
 use ValueObjects\Identity\UUID;
 use ValueObjects\String\String as StringLiteral;
@@ -25,11 +23,20 @@ class StoreRepository implements RepositoryInterface
      */
     private $xmlRepository;
 
-    public function __construct()
-    {
-        $this->loggingRepository = new StoreLoggingDBALRepository();
-        $this->relationsRepository = new StoreRelationsDBALRepository();
-        $this->xmlRepository = new StoreXmlDBALRepository();
+    /**
+     * StoreRepository constructor.
+     * @param LoggingRepositoryInterface $loggingRepository
+     * @param RelationsRepositoryInterface $relationsRepository
+     * @param XmlRepositoryInterface $xmlRepository
+     */
+    public function __construct(
+        LoggingRepositoryInterface $loggingRepository,
+        RelationsRepositoryInterface $relationsRepository,
+        XmlRepositoryInterface $xmlRepository
+    ) {
+        $this->loggingRepository = $loggingRepository;
+        $this->relationsRepository = $relationsRepository;
+        $this->xmlRepository = $xmlRepository;
     }
 
     /**
