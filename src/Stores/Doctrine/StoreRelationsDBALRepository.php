@@ -38,9 +38,9 @@ class StoreRelationsDBALRepository extends AbstractDBALRepository implements Rel
 
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->select(SchemaRelationsConfigurator::UUID_COLUMN)
-            ->from($this->getTableName()-toNative())
+            ->from($this->getTableName()->toNative())
             ->where($whereId)
-            ->setParameter([$externalId]);
+            ->setParameter('?', $externalId);
 
         return $this->getResult($queryBuilder);
     }
