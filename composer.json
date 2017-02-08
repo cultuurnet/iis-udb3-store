@@ -5,6 +5,7 @@
     "license": "Apache-2.0",
     "authors": [],
     "require": {
+        "doctrine/orm": "^2.5",
         "doctrine/dbal": "^2.5",
         "doctrine/migrations": "^1.4",
         "nicolopignatelli/valueobjects": "~2.0"
