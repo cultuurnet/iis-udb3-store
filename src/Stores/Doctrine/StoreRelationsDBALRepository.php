@@ -40,7 +40,12 @@ class StoreRelationsDBALRepository extends AbstractDBALRepository implements Rel
         $queryBuilder->select(SchemaRelationsConfigurator::UUID_COLUMN)
             ->from($this->getTableName()->toNative())
             ->where($whereId)
-            ->setParameter('?', $externalId);
+            ->setParameter('?', $externalId)
+            ->orderBy(SchemaLogConfigurator::UPDATED_COLUMN, 'DESC');
+
+        $result = $queryBuilder->execute();
+        $resultSet = $result->fetchAll();
+        var_dump($resultSet);
 
         return $this->getResult($queryBuilder);
     }
