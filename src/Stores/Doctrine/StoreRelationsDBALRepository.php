@@ -34,13 +34,13 @@ class StoreRelationsDBALRepository extends AbstractDBALRepository implements Rel
      */
     public function getEventCdbid(StringLiteral $externalId)
     {
-        $whereId = SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN . ' = ?';
+        $whereId = SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN . ' = :externalId';
 
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->select(SchemaRelationsConfigurator::UUID_COLUMN)
             ->from($this->getTableName()->toNative())
             ->where($whereId)
-            ->setParameter('?', $externalId)
+            ->setParameter('externalId', $externalId)
             ->orderBy(SchemaLogConfigurator::UPDATED_COLUMN, 'DESC');
 
         $result = $queryBuilder->execute();
