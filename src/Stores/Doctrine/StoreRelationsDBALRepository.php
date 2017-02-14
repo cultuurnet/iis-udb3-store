@@ -14,15 +14,26 @@ class StoreRelationsDBALRepository extends AbstractDBALRepository implements Rel
     public function storeRelations(UUID $eventUuid, StringLiteral $externalId, $isUpdate)
     {
         $queryBuilder = $this->createQueryBuilder();
-        $queryBuilder->insert($this->getTableName()->toNative())
-            ->values([
-                SchemaRelationsConfigurator::UUID_COLUMN => '?',
-                SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN => '?'
-            ])
-            ->setParameters([
-                $eventUuid,
-                $externalId
-            ]);
+        if ($isUpdate) {
+            $expr = $this->getConnection()->getExpressionBuilder();
+
+            $queryBuilder->update($this->getTableName()->toNative())
+                ->where($expr->eq(SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN, ':external_id'))
+                    ->set(SchemaRelationsConfigurator::UUID_COLUMN, ':uuid')
+                    ->set(SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN, ':external_id')
+                    ->setParameter('uuid', $eventUuid->toNative())
+                    ->setParameter('external_id', $externalId->toNative());
+        } else {
+            $queryBuilder->insert($this->getTableName()->toNative())
+                ->values([
+                    SchemaRelationsConfigurator::UUID_COLUMN => '?',
+                    SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN => '?'
+                ])
+                ->setParameters([
+                    $eventUuid,
+                    $externalId
+                ]);
+        }
 
         $queryBuilder->execute();
     }
