@@ -45,7 +45,7 @@ class StoreRelationsDBALRepository extends AbstractDBALRepository implements Rel
         if (empty($resultSet)) {
             return null;
         } else {
-            return $resultSet[0]['cdbid'];
+            return UUID::fromNative($resultSet[0]['cdbid']);
         }
     }
 }
