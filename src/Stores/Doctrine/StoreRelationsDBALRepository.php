@@ -9,10 +9,9 @@ use ValueObjects\String\String as StringLiteral;
 class StoreRelationsDBALRepository extends AbstractDBALRepository implements RelationsRepositoryInterface
 {
     /**
-     * @param UUID $eventUuid
-     * @param StringLiteral $externalId
+     * @inheritdoc
      */
-    public function storeRelations(UUID $eventUuid, StringLiteral $externalId)
+    public function storeRelations(UUID $eventUuid, StringLiteral $externalId, $isUpdate)
     {
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->insert($this->getTableName()->toNative())
@@ -29,8 +28,7 @@ class StoreRelationsDBALRepository extends AbstractDBALRepository implements Rel
     }
 
     /**
-     * @param StringLiteral $externalId
-     * @return UUID|null $cdbid
+     * @inheritdoc
      */
     public function getEventCdbid(StringLiteral $externalId)
     {
@@ -44,7 +42,10 @@ class StoreRelationsDBALRepository extends AbstractDBALRepository implements Rel
 
         $result = $queryBuilder->execute();
         $resultSet = $result->fetchAll();
-
-        return $this->getResult($queryBuilder);
+        if (empty($resultSet)) {
+            return null;
+        } else {
+            return $resultSet[0]['cdbid'];
+        }
     }
 }

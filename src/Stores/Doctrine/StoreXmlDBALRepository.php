@@ -10,9 +10,7 @@ use ValueObjects\String\String as StringLiteral;
 class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlRepositoryInterface
 {
     /**
-     * @param UUID $eventUuid
-     * @param StringLiteral $eventXml
-     * @param bool $isUpdate
+     * @inheritdoc
      */
     public function storeEventXml(UUID $eventUuid, StringLiteral $eventXml, $isUpdate)
     {

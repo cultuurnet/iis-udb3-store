@@ -9,10 +9,7 @@ use ValueObjects\Identity\UUID;
 class StoreLoggingDBALRepository extends AbstractDBALRepository implements LoggingRepositoryInterface
 {
     /**
-     * @param UUID $eventUuid
-     * @param DateTime $eventCreated
-     * @param DateTime $eventUpdated
-     * @param DateTime $eventPublished
+     * @inheritdoc
      */
     public function storeStatus(
         UUID $eventUuid,

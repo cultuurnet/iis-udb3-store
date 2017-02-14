@@ -10,8 +10,9 @@ interface RelationsRepositoryInterface
     /**
      * @param UUID $eventUuid
      * @param StringLiteral $externalId
+     * @param bool $isUpdate
      */
-    public function storeRelations(UUID $eventUuid, StringLiteral $externalId);
+    public function storeRelations(UUID $eventUuid, StringLiteral $externalId, $isUpdate);
 
 
     /**
