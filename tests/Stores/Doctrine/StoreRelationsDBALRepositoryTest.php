@@ -54,7 +54,8 @@ class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->storeRelationsDBALRepository->storeRelations(
             $this->cdbid,
-            $this->external_id
+            $this->external_id,
+            false
         );
 
         $this->storedRelationRow = $this->getStoredRelation();

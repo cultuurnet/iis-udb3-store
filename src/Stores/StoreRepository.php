@@ -58,9 +58,9 @@ class StoreRepository implements RepositoryInterface
     /**
      * @inheritdoc
      */
-    public function storeRelations(UUID $eventUuid, StringLiteral $externalId)
+    public function storeRelations(UUID $eventUuid, StringLiteral $externalId, $isUpdate)
     {
-        return $this->relationsRepository->storeRelations($eventUuid, $externalId);
+        return $this->relationsRepository->storeRelations($eventUuid, $externalId, $isUpdate);
     }
 
     /**
