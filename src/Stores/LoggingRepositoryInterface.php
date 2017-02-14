@@ -9,9 +9,9 @@ interface LoggingRepositoryInterface
 {
     /**
      * @param UUID $eventUuid
-     * @param DateTime $eventCreated
-     * @param DateTime $eventUpdated
-     * @param DateTime $eventPublished
+     * @param null|DateTime $eventCreated
+     * @param null|DateTime $eventUpdated
+     * @param null|DateTime $eventPublished
      */
     public function storeStatus(
         UUID $eventUuid,
