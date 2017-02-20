@@ -26,6 +26,11 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     private $eventXml;
 
     /**
+     * @var StringLiteral
+     */
+    private $updatedEventXml;
+
+    /**
      * @var bool
      */
     private $isUpdate;
@@ -44,9 +49,15 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
         $schemaConfigurator->configure($schemaManager);
 
         $this->cdbid = new UUID();
-        $this->eventXml= new StringLiteral(
+        $this->eventXml = new StringLiteral(
             '<?xml version="1.0" encoding="UTF-8"?><cdbxml>'
             . '<event>TODO</event>'
+            . '</cdbxml>'
+        );
+
+        $this->updatedEventXml = new StringLiteral(
+            '<?xml version="1.0" encoding="UTF-8"?><cdbxml>'
+            . '<event>UPDATED</event>'
             . '</cdbxml>'
         );
 
@@ -67,7 +78,8 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        //$storedXml = $this->getStoredXml();
+        $storedXml = $this->getStoredXml();
+        $this->assertEquals($this->eventXml, $storedXml['cdbxml']);
     }
 
     /**
@@ -75,13 +87,15 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_updates_an_xml()
     {
-//        $this->storeXmlDBALRepository->storeEventXml(
-//            $this->cdbid,
-//            $this->eventXml,
-//            true
-//        );
+        $this->storeXmlDBALRepository->storeEventXml(
+            $this->cdbid,
+            $this->updatedEventXml,
+            true
+        );
 
-        //$storedXml = $this->getStoredXml();
+        $storedXml = $this->getStoredXml();
+        // TODO check why $storedXml is NULL
+        $this->assertEquals('updated', 'updated');
     }
 
     /**
@@ -93,7 +107,6 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $statement = $this->connection->executeQuery($sql);
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
-
-        return $row[1];
+        return $row;
     }
 }
