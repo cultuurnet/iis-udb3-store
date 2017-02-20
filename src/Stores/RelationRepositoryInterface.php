@@ -5,14 +5,14 @@ namespace CultuurNet\UDB3\IISStore\Stores;
 use ValueObjects\Identity\UUID;
 use ValueObjects\StringLiteral\StringLiteral;
 
-interface RelationsRepositoryInterface
+interface RelationRepositoryInterface
 {
     /**
      * @param UUID $eventUuid
      * @param StringLiteral $externalId
      * @param bool $isUpdate
      */
-    public function storeRelations(UUID $eventUuid, StringLiteral $externalId, $isUpdate);
+    public function storeRelation(UUID $eventUuid, StringLiteral $externalId, $isUpdate);
 
 
     /**

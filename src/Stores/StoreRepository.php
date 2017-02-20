@@ -14,9 +14,9 @@ class StoreRepository implements RepositoryInterface
     private $loggingRepository;
 
     /**
-     * @var RelationsRepositoryInterface
+     * @var RelationRepositoryInterface
      */
-    private $relationsRepository;
+    private $relationRepository;
 
     /**
      * @var XmlRepositoryInterface
@@ -26,16 +26,16 @@ class StoreRepository implements RepositoryInterface
     /**
      * StoreRepository constructor.
      * @param LoggingRepositoryInterface $loggingRepository
-     * @param RelationsRepositoryInterface $relationsRepository
+     * @param RelationRepositoryInterface $relationRepository
      * @param XmlRepositoryInterface $xmlRepository
      */
     public function __construct(
         LoggingRepositoryInterface $loggingRepository,
-        RelationsRepositoryInterface $relationsRepository,
+        RelationRepositoryInterface $relationRepository,
         XmlRepositoryInterface $xmlRepository
     ) {
         $this->loggingRepository = $loggingRepository;
-        $this->relationsRepository = $relationsRepository;
+        $this->relationRepository = $relationRepository;
         $this->xmlRepository = $xmlRepository;
     }
 
@@ -52,15 +52,15 @@ class StoreRepository implements RepositoryInterface
      */
     public function getEventCdbid(StringLiteral $externalId)
     {
-        return $this->relationsRepository->getEventCdbid($externalId);
+        return $this->relationRepository->getEventCdbid($externalId);
     }
 
     /**
      * @inheritdoc
      */
-    public function storeRelations(UUID $eventUuid, StringLiteral $externalId, $isUpdate)
+    public function storeRelation(UUID $eventUuid, StringLiteral $externalId, $isUpdate)
     {
-        return $this->relationsRepository->storeRelations($eventUuid, $externalId, $isUpdate);
+        return $this->relationRepository->storeRelation($eventUuid, $externalId, $isUpdate);
     }
 
     /**

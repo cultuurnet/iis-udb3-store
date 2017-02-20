@@ -7,7 +7,7 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Types\Type;
 use ValueObjects\StringLiteral\StringLiteral;
 
-class SchemaRelationsConfigurator implements SchemaConfiguratorInterface
+class SchemaRelationConfigurator implements SchemaConfiguratorInterface
 {
     const UUID_COLUMN = 'cdbid';
     const EXTERNAL_ID_COLUMN = 'external_id';

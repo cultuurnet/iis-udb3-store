@@ -6,7 +6,7 @@ use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
 use ValueObjects\Identity\UUID;
 use \ValueObjects\StringLiteral\StringLiteral;
 
-class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
+class StoreRelationDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     use DBALTestConnectionTrait;
 
@@ -26,9 +26,9 @@ class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     private $external_id;
 
     /**
-     * @var StoreRelationsDBALRepository
+     * @var StoreRelationDBALRepository
      */
-    private $storeRelationsDBALRepository;
+    private $storeRelationDBALRepository;
 
     /**
      * @var array
@@ -39,19 +39,19 @@ class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->tableName = new StringLiteral('test_relation');
 
-        $schemaConfigurator = new SchemaRelationsConfigurator($this->tableName);
+        $schemaConfigurator = new SchemaRelationConfigurator($this->tableName);
         $schemaManager = $this->getConnection()->getSchemaManager();
         $schemaConfigurator->configure($schemaManager);
 
         $this->cdbid = new UUID();
         $this->external_id = new StringLiteral('CDB:Example123');
 
-        $this->storeRelationsDBALRepository = new StoreRelationsDBALRepository(
+        $this->storeRelationDBALRepository = new StoreRelationDBALRepository(
             $this->getConnection(),
             $this->tableName
         );
 
-        $this->storeRelationsDBALRepository->storeRelations(
+        $this->storeRelationDBALRepository->storeRelation(
             $this->cdbid,
             $this->external_id,
             false
@@ -66,7 +66,7 @@ class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     public function it_stores_the_uuid()
     {
         $this->assertEquals(
-            $this->storedRelationRow[SchemaRelationsConfigurator::UUID_COLUMN],
+            $this->storedRelationRow[SchemaRelationConfigurator::UUID_COLUMN],
             $this->cdbid
         );
     }
@@ -77,7 +77,7 @@ class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     public function it_stores_the_external_id()
     {
         $this->assertEquals(
-            $this->storedRelationRow[SchemaRelationsConfigurator::EXTERNAL_ID_COLUMN],
+            $this->storedRelationRow[SchemaRelationConfigurator::EXTERNAL_ID_COLUMN],
             $this->external_id
         );
     }
