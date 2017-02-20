@@ -4,7 +4,7 @@ namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
-use ValueObjects\String\String as StringLiteral;
+use ValueObjects\StringLiteral\StringLiteral;
 
 abstract class AbstractDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {

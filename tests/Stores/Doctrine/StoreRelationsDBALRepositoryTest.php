@@ -3,9 +3,8 @@
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
-use phpDocumentor\Reflection\Types\Array_;
 use ValueObjects\Identity\UUID;
-use \ValueObjects\String\String as StringLiteral;
+use \ValueObjects\StringLiteral\StringLiteral;
 
 class StoreRelationsDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {

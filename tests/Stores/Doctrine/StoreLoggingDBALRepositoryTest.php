@@ -9,7 +9,7 @@ use ValueObjects\DateTime\Month;
 use ValueObjects\DateTime\MonthDay;
 use ValueObjects\DateTime\Year;
 use ValueObjects\Identity\UUID;
-use \ValueObjects\String\String as StringLiteral;
+use \ValueObjects\StringLiteral\StringLiteral;
 
 class StoreLoggingDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {

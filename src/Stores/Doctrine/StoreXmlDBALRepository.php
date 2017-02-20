@@ -3,9 +3,8 @@
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\Stores\XmlRepositoryInterface;
-use ValueObjects\DateTime\DateTime;
 use ValueObjects\Identity\UUID;
-use ValueObjects\String\String as StringLiteral;
+use ValueObjects\StringLiteral\StringLiteral;
 
 class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlRepositoryInterface
 {

@@ -5,7 +5,7 @@ namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 use CultuurNet\UDB3\IISStore\Doctrine\DBAL\SchemaConfiguratorInterface;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Types\Type;
-use ValueObjects\String\String as StringLiteral;
+use ValueObjects\StringLiteral\StringLiteral;
 
 class SchemaTextConfigurator implements SchemaConfiguratorInterface
 {

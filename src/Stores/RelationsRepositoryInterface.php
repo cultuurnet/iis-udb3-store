@@ -3,7 +3,7 @@
 namespace CultuurNet\UDB3\IISStore\Stores;
 
 use ValueObjects\Identity\UUID;
-use ValueObjects\String\String as StringLiteral;
+use ValueObjects\StringLiteral\StringLiteral;
 
 interface RelationsRepositoryInterface
 {

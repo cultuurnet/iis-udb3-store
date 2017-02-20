@@ -7,10 +7,10 @@
     "require": {
         "doctrine/dbal": "^2.5",
         "doctrine/migrations": "^1.4",
-        "nicolopignatelli/valueobjects": "~2.0"
+        "nicolopignatelli/valueobjects": "~3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.8",
+        "phpunit/phpunit": "~5.7",
         "squizlabs/php_codesniffer": "~2.3",
         "phing/phing": "~2.11",
         "satooshi/php-coveralls": "~0.7"
