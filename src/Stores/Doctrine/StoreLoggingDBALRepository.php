@@ -11,27 +11,53 @@ class StoreLoggingDBALRepository extends AbstractDBALRepository implements Loggi
     /**
      * @inheritdoc
      */
-    public function storeStatus(
+    public function saveStatus(
         UUID $eventUuid,
-        DateTime $eventCreated,
-        DateTime $eventUpdated,
-        DateTime $eventPublished
+        DateTime $eventCreated
     ) {
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->insert($this->getTableName()->toNative())
             ->values([
                 SchemaLogConfigurator::UUID_COLUMN => '?',
                 SchemaLogConfigurator::CREATE_COLUMN => '?',
-                SchemaLogConfigurator::UPDATED_COLUMN => '?',
-                SchemaLogConfigurator::PUBLISHED_COLUMN => '?'
             ])
             ->setParameters([
                 $eventUuid,
                 $eventCreated->toNativeDateTime(),
-                $eventUpdated->toNativeDateTime(),
-                $eventPublished->toNativeDateTime(),
             ]);
 
+        $queryBuilder->execute();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateStatus(
+        UUID $eventUuid,
+        DateTime $eventUpdated
+    ) {
+        $expr = $this->getConnection()->getExpressionBuilder();
+
+        $queryBuilder->update($this->getTableName()->toNative())
+            ->where($expr->eq(SchemaLogConfigurator::UUID_COLUMN, ':cdbid'))
+            ->set(SchemaLogConfigurator::UPDATED_COLUMN, ':updated')
+            ->setParameter('updated', $eventUpdated);
+        $queryBuilder->execute();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function publishStatus(
+        UUID $eventUuid,
+        DateTime $eventPublished
+    ) {
+        $expr = $this->getConnection()->getExpressionBuilder();
+
+        $queryBuilder->update($this->getTableName()->toNative())
+            ->where($expr->eq(SchemaLogConfigurator::UUID_COLUMN, ':cdbid'))
+            ->set(SchemaLogConfigurator::PUBLISHED_COLUMN, ':published')
+            ->setParameter('published', $eventPublished);
         $queryBuilder->execute();
     }
 }

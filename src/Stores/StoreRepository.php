@@ -64,15 +64,32 @@ class StoreRepository implements RepositoryInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function saveStatus(
+        UUID $eventUuid,
+        DateTime $eventCreated
+    ) {
+        $this->saveStatus($eventUuid, $eventCreated);
+    }
+
     /**
      * @inheritdoc
      */
-    public function storeStatus(
+    public function updateStatus(
         UUID $eventUuid,
-        DateTime $eventCreated,
-        DateTime $eventUpdated,
+        DateTime $eventUpdated
+    ) {
+        $this->loggingRepository->updateStatus($eventUuid, $eventUpdated);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function publishStatus(
+        UUID $eventUuid,
         DateTime $eventPublished
     ) {
-        return $this->loggingRepository->storeStatus($eventUuid, $eventCreated, $eventUpdated, $eventPublished);
+        $this->loggingRepository->publishStatus($eventUuid, $eventPublished);
     }
 }

@@ -10,13 +10,27 @@ interface LoggingRepositoryInterface
     /**
      * @param UUID $eventUuid
      * @param null|DateTime $eventCreated
-     * @param null|DateTime $eventUpdated
-     * @param null|DateTime $eventPublished
      */
-    public function storeStatus(
+    public function saveStatus(
         UUID $eventUuid,
-        DateTime $eventCreated,
-        DateTime $eventUpdated,
+        DateTime $eventCreated
+    );
+
+    /**
+     * @param UUID $eventUuid
+     * @param null|DateTime $eventUpdated
+     */
+    public function updateStatus(
+        UUID $eventUuid,
+        DateTime $eventUpdated
+    );
+
+    /**
+     * @param UUID $eventUuid
+     * @param DateTime $eventPublished
+     */
+    public function publishStatus(
+        UUID $eventUuid,
         DateTime $eventPublished
     );
 }
