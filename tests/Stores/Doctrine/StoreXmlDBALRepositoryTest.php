@@ -117,6 +117,16 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_returns_null_when_no_xml_found_for_event_cdbid()
+    {
+        $storedXml = $this->storeXmlDBALRepository->getEventXml($this->cdbid);
+
+        $this->assertNull($storedXml);
+    }
+
+    /**
+     * @test
+     */
     public function it_has_a_unique_contraint_on_event_cdbid()
     {
         $this->expectException(UniqueConstraintViolationException::class);
