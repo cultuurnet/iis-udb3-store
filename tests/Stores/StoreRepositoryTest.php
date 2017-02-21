@@ -2,7 +2,6 @@
 
 namespace CultuurNet\UDB3\IISStore\Stores;
 
-
 use ValueObjects\Identity\UUID;
 use ValueObjects\StringLiteral\StringLiteral;
 
