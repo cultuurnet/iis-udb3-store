@@ -44,6 +44,8 @@ class SchemaLogConfigurator implements SchemaConfiguratorInterface
         $table->addColumn(self::PUBLISHED_COLUMN, Type::DATETIME)
             ->setNotnull(false);
 
+        $table->addIndex([self::UUID_COLUMN]);
+
         $schemaManager->createTable($table);
     }
 }
