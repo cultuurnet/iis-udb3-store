@@ -42,9 +42,25 @@ class StoreRepository implements RepositoryInterface
     /**
      * @inheritdoc
      */
-    public function storeEventXml(UUID $eventUuid, StringLiteral $eventXml, $isUpdate)
+    public function saveEventXml(UUID $eventCdbid, StringLiteral $eventXml)
     {
-        return $this->xmlRepository->storeEventXml($eventUuid, $eventXml, $isUpdate);
+        $this->xmlRepository->saveEventXml($eventCdbid, $eventXml);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateEventXml(UUID $eventCdbid, StringLiteral $eventXml)
+    {
+        $this->xmlRepository->updateEventXml($eventCdbid, $eventXml);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEventXml(UUID $eventCdbid)
+    {
+        return $this->xmlRepository->getEventXml($eventCdbid);
     }
 
     /**
@@ -60,7 +76,7 @@ class StoreRepository implements RepositoryInterface
      */
     public function saveRelation(UUID $eventCdbid, StringLiteral $externalId)
     {
-        return $this->relationRepository->saveRelation($eventCdbid, $externalId);
+        $this->relationRepository->saveRelation($eventCdbid, $externalId);
     }
 
     /**

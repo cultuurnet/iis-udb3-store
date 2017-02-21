@@ -9,9 +9,8 @@ use ValueObjects\StringLiteral\StringLiteral;
 
 class SchemaXmlConfigurator implements SchemaConfiguratorInterface
 {
-    const UUID_COLUMN = 'cdbid';
+    const CDBID_COLUMN = 'cdbid';
     const XML_COLUMN = 'cdbxml';
-    const IS_UPDATE_COLUMN = 'update_col';
 
     /**
      * @var StringLiteral
@@ -34,16 +33,14 @@ class SchemaXmlConfigurator implements SchemaConfiguratorInterface
         $schema = $schemaManager->createSchema();
         $table = $schema->createTable($this->tableName->toNative());
 
-        $table->addColumn(self::UUID_COLUMN, Type::GUID)
+        $table->addColumn(self::CDBID_COLUMN, Type::GUID)
             ->setLength(36)
             ->setNotnull(true);
         $table->addColumn(self::XML_COLUMN, Type::TEXT)
             ->setNotnull(true);
-        $table->addColumn(self::IS_UPDATE_COLUMN, Type::BOOLEAN)
-            ->setNotnull(true);
 
-        $table->setPrimaryKey([self::UUID_COLUMN]);
-        $table->addUniqueIndex([self::UUID_COLUMN]);
+        $table->setPrimaryKey([self::CDBID_COLUMN]);
+        $table->addUniqueIndex([self::CDBID_COLUMN]);
 
         $schemaManager->createTable($table);
     }

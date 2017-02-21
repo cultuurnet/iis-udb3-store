@@ -46,7 +46,7 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_delegates_get_event_cdbid_to_relation_repo()
+    public function it_delegates_get_event_cdbid_to_relation_repository()
     {
         $eventCdbid = new UUID();
         $externalId = new StringLiteral('CDB:Example123');
@@ -74,5 +74,53 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($eventCdbid, $externalId);
 
         $this->storeRepository->saveRelation($eventCdbid, $externalId);
+    }
+
+    /**
+     * @test
+     */
+    public function it_delegates_save_event_xml_to_xml_repository()
+    {
+        $eventCdbid = new UUID();
+        $eventXml = new StringLiteral('<xml></xml>');
+
+        $this->xmlRepository->expects($this->once())
+            ->method('saveEventXml')
+            ->with($eventCdbid, $eventXml);
+
+        $this->storeRepository->saveEventXml($eventCdbid, $eventXml);
+    }
+
+    /**
+     * @test
+     */
+    public function it_delegates_update_event_xml_to_xml_repository()
+    {
+        $eventCdbid = new UUID();
+        $eventXml = new StringLiteral('<xml></xml>');
+
+        $this->xmlRepository->expects($this->once())
+            ->method('updateEventXml')
+            ->with($eventCdbid, $eventXml);
+
+        $this->storeRepository->updateEventXml($eventCdbid, $eventXml);
+    }
+
+    /**
+     * @test
+     */
+    public function it_delegates_get_event_xml_to_xml_repository()
+    {
+        $eventCdbid = new UUID();
+        $eventXml = new StringLiteral('<xml></xml>');
+
+        $this->xmlRepository->expects($this->once())
+            ->method('getEventXml')
+            ->with($eventCdbid)
+            ->willReturn($eventXml);
+
+        $actualEventXml = $this->storeRepository->getEventXml($eventCdbid);
+
+        $this->assertEquals($eventXml, $actualEventXml);
     }
 }

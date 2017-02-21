@@ -11,34 +11,64 @@ class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlReposi
     /**
      * @inheritdoc
      */
-    public function storeEventXml(UUID $eventUuid, StringLiteral $eventXml, $isUpdate)
+    public function saveEventXml(UUID $eventUuid, StringLiteral $eventXml)
     {
         $queryBuilder = $this->createQueryBuilder();
 
-        if ($isUpdate) {
-            $expr = $this->getConnection()->getExpressionBuilder();
+        $queryBuilder->insert($this->getTableName()->toNative())
+            ->values([
+                SchemaXmlConfigurator::CDBID_COLUMN => '?',
+                SchemaXmlConfigurator::XML_COLUMN => '?',
+            ])
+            ->setParameters([
+                $eventUuid->toNative(),
+                $eventXml->toNative(),
+            ]);
 
-            $queryBuilder->update($this->getTableName()->toNative())
-                ->where($expr->eq(SchemaXmlConfigurator::UUID_COLUMN, ':uuid'))
-                ->set(SchemaXmlConfigurator::UUID_COLUMN, ':uuid')
-                ->set(SchemaXmlConfigurator::XML_COLUMN, ':cdbxml')
-                ->set(SchemaXmlConfigurator::IS_UPDATE_COLUMN, ':update')
-                ->setParameter('uuid', $eventUuid->toNative())
-                ->setParameter('cdbxml', $eventXml->toNative())
-                ->setParameter('update', $isUpdate ? 1 : 0);
-        } else {
-            $queryBuilder->insert($this->getTableName()->toNative())
-                ->values([
-                    SchemaXmlConfigurator::UUID_COLUMN => '?',
-                    SchemaXmlConfigurator::XML_COLUMN => '?',
-                    SchemaXmlConfigurator::IS_UPDATE_COLUMN => '?'
-                ])
-                ->setParameters([
-                    $eventUuid->toNative(),
-                    $eventXml->toNative(),
-                    $isUpdate ? 1 : 0
-                ]);
-        }
         $queryBuilder->execute();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateEventXml(UUID $eventUuid, StringLiteral $eventXml)
+    {
+        $whereId = SchemaXmlConfigurator::CDBID_COLUMN . ' = :cdbid';
+
+        $queryBuilder = $this->createQueryBuilder();
+
+        $queryBuilder->update($this->getTableName()->toNative())
+            ->set(
+                SchemaXmlConfigurator::XML_COLUMN,
+                $queryBuilder->expr()->literal($eventXml->toNative())
+            )
+            ->where($whereId)
+            ->setParameters([
+                SchemaXmlConfigurator::CDBID_COLUMN => $eventUuid->toNative(),
+            ]);
+
+        $queryBuilder->execute();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEventXml(UUID $eventCdbid)
+    {
+        $whereId = SchemaXmlConfigurator::CDBID_COLUMN . ' = :cdbid';
+
+        $queryBuilder = $this->createQueryBuilder();
+        $queryBuilder->select(SchemaXmlConfigurator::XML_COLUMN)
+            ->from($this->getTableName()->toNative())
+            ->where($whereId)
+            ->setParameter('cdbid', $eventCdbid);
+
+        $statement = $queryBuilder->execute();
+        $resultSet = $statement->fetchAll();
+        if (empty($resultSet)) {
+            return null;
+        } else {
+            return StringLiteral::fromNative($resultSet[0][SchemaXmlConfigurator::XML_COLUMN]);
+        }
     }
 }

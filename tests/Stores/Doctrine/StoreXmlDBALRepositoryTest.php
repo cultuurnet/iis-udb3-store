@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use ValueObjects\Identity\UUID;
 use \ValueObjects\StringLiteral\StringLiteral;
 
@@ -30,10 +31,6 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $updatedEventXml;
 
-    /**
-     * @var bool
-     */
-    private $isUpdate;
 
     /**
      * @var StoreXmlDBALRepository
@@ -70,16 +67,16 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_stores_an_xml()
+    public function it_saves_an_xml()
     {
-        $this->storeXmlDBALRepository->storeEventXml(
+        $this->storeXmlDBALRepository->saveEventXml(
             $this->cdbid,
-            $this->eventXml,
-            false
+            $this->eventXml
         );
 
-        $storedXml = $this->getStoredXml();
-        $this->assertEquals($this->eventXml, $storedXml['cdbxml']);
+        $storedRow = $this->getStoredRow();
+
+        $this->assertEquals($this->eventXml, $storedRow['cdbxml']);
     }
 
     /**
@@ -87,21 +84,58 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_updates_an_xml()
     {
-        $this->storeXmlDBALRepository->storeEventXml(
+        $this->storeXmlDBALRepository->saveEventXml(
             $this->cdbid,
-            $this->updatedEventXml,
-            true
+            $this->eventXml
         );
 
-        $storedXml = $this->getStoredXml();
-        // TODO check why $storedXml is NULL
-        $this->assertEquals('updated', 'updated');
+        $this->storeXmlDBALRepository->updateEventXml(
+            $this->cdbid,
+            $this->updatedEventXml
+        );
+
+        $storedRow = $this->getStoredRow();
+
+        $this->assertEquals($this->updatedEventXml, $storedRow['cdbxml']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_get_an_xml_based_on_event_cdbid()
+    {
+        $this->storeXmlDBALRepository->saveEventXml(
+            $this->cdbid,
+            $this->eventXml
+        );
+
+        $storedXml = $this->storeXmlDBALRepository->getEventXml($this->cdbid);
+
+        $this->assertEquals($this->eventXml, $storedXml);
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_unique_contraint_on_event_cdbid()
+    {
+        $this->expectException(UniqueConstraintViolationException::class);
+
+        $this->storeXmlDBALRepository->saveEventXml(
+            $this->cdbid,
+            $this->eventXml
+        );
+
+        $this->storeXmlDBALRepository->saveEventXml(
+            $this->cdbid,
+            $this->updatedEventXml
+        );
     }
 
     /**
      * @return mixed
      */
-    protected function getStoredXml()
+    protected function getStoredRow()
     {
         $sql = 'SELECT * FROM ' . $this->tableName;
 
