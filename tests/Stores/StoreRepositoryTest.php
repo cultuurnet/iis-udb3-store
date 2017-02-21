@@ -2,72 +2,77 @@
 
 namespace CultuurNet\UDB3\IISStore\Stores;
 
-use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
-use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
+
+use ValueObjects\Identity\UUID;
+use ValueObjects\StringLiteral\StringLiteral;
 
 class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Connection
+     * @var LoggingRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $connection;
+    private $loggingRepository;
 
+    /**
+     * @var RelationRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $relationRepository;
+
+    /**
+     * @var XmlRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $xmlRepository;
+
+    /**
+     * @var StoreRepository
+     */
+    private $storeRepository;
+
+    protected function setUp()
+    {
+        $this->loggingRepository = $this->createMock(LoggingRepositoryInterface::class);
+
+        $this->relationRepository = $this->createMock(RelationRepositoryInterface::class);
+
+        $this->xmlRepository = $this->createMock(XmlRepositoryInterface::class);
+
+        $this->storeRepository = new StoreRepository(
+            $this->loggingRepository,
+            $this->relationRepository,
+            $this->xmlRepository
+        );
+    }
 
     /**
      * @test
      */
-    public function test()
+    public function it_delegates_get_event_cdbid_to_relation_repo()
     {
-       // Implement
+        $eventCdbid = new UUID();
+        $externalId = new StringLiteral('CDB:Example123');
+
+        $this->relationRepository->expects($this->once())
+            ->method('getEventCdbid')
+            ->with($externalId)
+            ->willReturn($eventCdbid);
+
+        $actualEventCdbid = $this->storeRepository->getEventCdbid($externalId);
+
+        $this->assertEquals($eventCdbid, $actualEventCdbid);
     }
 
-//    public function it_loads_an_offer_from_its_correct_repository_based_on_its_type(
-//        Url $iri,
-//        $id,
-//        OfferType $type
-//    )
-//    {
-//        $expectedRepo = new StoreLoggingDBALRepository($connection);
-//        // Map the given iri to our expected id and type.
-//        $this->iriOfferIdentifierFactory->expects($this->once())
-//            ->method('fromIri')
-//            ->with($iri)
-//            ->willReturn(
-//                new IriOfferIdentifier(
-//                    $iri,
-//                    $id,
-//                    $type
-//                )
-//            );
-//    }
-
-
-    protected function initializeConnection()
+    /**
+     * @test
+     */
+    public function it_delegates_save_relation_to_relation_repository()
     {
-        if (!class_exists('PDO')) {
-            $this->markTestSkipped('PDO is required to run this test.');
-        }
+        $eventCdbid = new UUID();
+        $externalId = new StringLiteral('CDB:Example123');
 
-        $availableDrivers = PDO::getAvailableDrivers();
-        if (!in_array('sqlite', $availableDrivers)) {
-            $this->markTestSkipped(
-                'PDO sqlite driver is required to run this test.'
-            );
-        }
+        $this->relationRepository->expects($this->once())
+            ->method('saveRelation')
+            ->with($eventCdbid, $externalId);
 
-        $this->connection = DriverManager::getConnection(
-            [
-                'url' => 'sqlite:///:memory:',
-            ]
-        );
-    }
-
-    public function getConnection()
-    {
-        if (!$this->connection) {
-            $this->initializeConnection();
-        }
-
-        return $this->connection;
+        $this->storeRepository->saveRelation($eventCdbid, $externalId);
     }
 }

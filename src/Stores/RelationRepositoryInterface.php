@@ -8,11 +8,10 @@ use ValueObjects\StringLiteral\StringLiteral;
 interface RelationRepositoryInterface
 {
     /**
-     * @param UUID $eventUuid
+     * @param UUID $eventCdbid
      * @param StringLiteral $externalId
-     * @param bool $isUpdate
      */
-    public function storeRelation(UUID $eventUuid, StringLiteral $externalId, $isUpdate);
+    public function saveRelation(UUID $eventCdbid, StringLiteral $externalId);
 
 
     /**

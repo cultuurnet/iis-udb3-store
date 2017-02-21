@@ -9,7 +9,7 @@ use ValueObjects\StringLiteral\StringLiteral;
 
 class SchemaRelationConfigurator implements SchemaConfiguratorInterface
 {
-    const UUID_COLUMN = 'cdbid';
+    const CDBID_COLUMN = 'cdbid';
     const EXTERNAL_ID_COLUMN = 'external_id';
 
     /**
@@ -33,13 +33,13 @@ class SchemaRelationConfigurator implements SchemaConfiguratorInterface
         $schema = $schemaManager->createSchema();
         $table = $schema->createTable($this->tableName->toNative());
 
-        $table->addColumn(self::UUID_COLUMN, Type::GUID)
+        $table->addColumn(self::CDBID_COLUMN, Type::GUID)
             ->setLength(36)
             ->setNotnull(true);
         $table->addColumn(self::EXTERNAL_ID_COLUMN, Type::TEXT)
             ->setNotnull(true);
 
-        $table->addUniqueIndex([self::UUID_COLUMN]);
+        $table->addUniqueIndex([self::CDBID_COLUMN]);
         $table->addUniqueIndex([self::EXTERNAL_ID_COLUMN]);
 
         $schemaManager->createTable($table);

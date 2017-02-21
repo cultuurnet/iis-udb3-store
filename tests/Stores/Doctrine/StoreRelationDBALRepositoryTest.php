@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use ValueObjects\Identity\UUID;
 use \ValueObjects\StringLiteral\StringLiteral;
 
@@ -18,12 +19,12 @@ class StoreRelationDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var UUID
      */
-    private $cdbid;
+    private $eventCdbid;
 
     /**
      * @var StringLiteral
      */
-    private $external_id;
+    private $externalId;
 
     /**
      * @var StoreRelationDBALRepository
@@ -43,18 +44,17 @@ class StoreRelationDBALRepositoryTest extends \PHPUnit_Framework_TestCase
         $schemaManager = $this->getConnection()->getSchemaManager();
         $schemaConfigurator->configure($schemaManager);
 
-        $this->cdbid = new UUID();
-        $this->external_id = new StringLiteral('CDB:Example123');
+        $this->eventCdbid = new UUID();
+        $this->externalId = new StringLiteral('CDB:Example123');
 
         $this->storeRelationDBALRepository = new StoreRelationDBALRepository(
             $this->getConnection(),
             $this->tableName
         );
 
-        $this->storeRelationDBALRepository->storeRelation(
-            $this->cdbid,
-            $this->external_id,
-            false
+        $this->storeRelationDBALRepository->saveRelation(
+            $this->eventCdbid,
+            $this->externalId
         );
 
         $this->storedRelationRow = $this->getStoredRelation();
@@ -66,8 +66,8 @@ class StoreRelationDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     public function it_stores_the_uuid()
     {
         $this->assertEquals(
-            $this->storedRelationRow[SchemaRelationConfigurator::UUID_COLUMN],
-            $this->cdbid
+            $this->storedRelationRow[SchemaRelationConfigurator::CDBID_COLUMN],
+            $this->eventCdbid
         );
     }
 
@@ -78,8 +78,46 @@ class StoreRelationDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             $this->storedRelationRow[SchemaRelationConfigurator::EXTERNAL_ID_COLUMN],
-            $this->external_id
+            $this->externalId
         );
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_unique_constraint_on_uuid()
+    {
+        $this->expectException(UniqueConstraintViolationException::class);
+
+        $this->storeRelationDBALRepository->saveRelation(
+            $this->eventCdbid,
+            new StringLiteral('CDB:OtherExample')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_unique_constraint_on_external_id()
+    {
+        $this->expectException(UniqueConstraintViolationException::class);
+
+        $this->storeRelationDBALRepository->saveRelation(
+            new UUID(),
+            $this->externalId
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_get_the_cdbid_of_an_event()
+    {
+        $actualEventCdbid = $this->storeRelationDBALRepository->getEventCdbid(
+            $this->externalId
+        );
+
+        $this->assertEquals($this->eventCdbid, $actualEventCdbid);
     }
 
     /**
