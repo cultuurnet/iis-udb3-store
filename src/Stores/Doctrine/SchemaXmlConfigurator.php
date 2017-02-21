@@ -7,7 +7,7 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Types\Type;
 use ValueObjects\StringLiteral\StringLiteral;
 
-class SchemaTextConfigurator implements SchemaConfiguratorInterface
+class SchemaXmlConfigurator implements SchemaConfiguratorInterface
 {
     const UUID_COLUMN = 'cdbid';
     const XML_COLUMN = 'cdbxml';

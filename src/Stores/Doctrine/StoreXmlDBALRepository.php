@@ -19,19 +19,19 @@ class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlReposi
             $expr = $this->getConnection()->getExpressionBuilder();
 
             $queryBuilder->update($this->getTableName()->toNative())
-                ->where($expr->eq(SchemaTextConfigurator::UUID_COLUMN, ':uuid'))
-                ->set(SchemaTextConfigurator::UUID_COLUMN, ':uuid')
-                ->set(SchemaTextConfigurator::XML_COLUMN, ':cdbxml')
-                ->set(SchemaTextConfigurator::IS_UPDATE_COLUMN, ':update')
+                ->where($expr->eq(SchemaXmlConfigurator::UUID_COLUMN, ':uuid'))
+                ->set(SchemaXmlConfigurator::UUID_COLUMN, ':uuid')
+                ->set(SchemaXmlConfigurator::XML_COLUMN, ':cdbxml')
+                ->set(SchemaXmlConfigurator::IS_UPDATE_COLUMN, ':update')
                 ->setParameter('uuid', $eventUuid->toNative())
                 ->setParameter('cdbxml', $eventXml->toNative())
                 ->setParameter('update', $isUpdate ? 1 : 0);
         } else {
             $queryBuilder->insert($this->getTableName()->toNative())
                 ->values([
-                    SchemaTextConfigurator::UUID_COLUMN => '?',
-                    SchemaTextConfigurator::XML_COLUMN => '?',
-                    SchemaTextConfigurator::IS_UPDATE_COLUMN => '?'
+                    SchemaXmlConfigurator::UUID_COLUMN => '?',
+                    SchemaXmlConfigurator::XML_COLUMN => '?',
+                    SchemaXmlConfigurator::IS_UPDATE_COLUMN => '?'
                 ])
                 ->setParameters([
                     $eventUuid->toNative(),

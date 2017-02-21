@@ -44,7 +44,7 @@ class StoreXmlDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->tableName = new StringLiteral('test_xml');
 
-        $schemaConfigurator = new SchemaTextConfigurator($this->tableName);
+        $schemaConfigurator = new SchemaXmlConfigurator($this->tableName);
         $schemaManager = $this->getConnection()->getSchemaManager();
         $schemaConfigurator->configure($schemaManager);
 
