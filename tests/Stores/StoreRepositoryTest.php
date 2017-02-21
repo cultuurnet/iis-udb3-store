@@ -135,7 +135,7 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('saveCreated')
             ->with($eventCdbid, $createdDateTime);
 
-        $this->loggingRepository->saveCreated($eventCdbid, $createdDateTime);
+        $this->storeRepository->saveCreated($eventCdbid, $createdDateTime);
     }
 
     /**
@@ -150,7 +150,7 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('saveUpdated')
             ->with($eventCdbid, $updatedDateTime);
 
-        $this->loggingRepository->saveUpdated($eventCdbid, $updatedDateTime);
+        $this->storeRepository->saveUpdated($eventCdbid, $updatedDateTime);
     }
 
     /**
@@ -165,6 +165,6 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('savePublished')
             ->with($eventCdbid, $publishedDateTime);
 
-        $this->loggingRepository->savePublished($eventCdbid, $publishedDateTime);
+        $this->storeRepository->savePublished($eventCdbid, $publishedDateTime);
     }
 }
