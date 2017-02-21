@@ -2,35 +2,34 @@
 
 namespace CultuurNet\UDB3\IISStore\Stores;
 
-use ValueObjects\DateTime\DateTime;
 use ValueObjects\Identity\UUID;
 
 interface LoggingRepositoryInterface
 {
     /**
-     * @param UUID $eventUuid
-     * @param null|DateTime $eventCreated
+     * @param UUID $eventCdbid
+     * @param \DateTimeInterface $createdDateTime
      */
-    public function saveStatus(
-        UUID $eventUuid,
-        DateTime $eventCreated
+    public function saveCreated(
+        UUID $eventCdbid,
+        \DateTimeInterface $createdDateTime
     );
 
     /**
-     * @param UUID $eventUuid
-     * @param null|DateTime $eventUpdated
+     * @param UUID $eventCdbid
+     * @param \DateTimeInterface $updatedDateTime
      */
-    public function updateStatus(
-        UUID $eventUuid,
-        DateTime $eventUpdated
+    public function saveUpdated(
+        UUID $eventCdbid,
+        \DateTimeInterface $updatedDateTime
     );
 
     /**
-     * @param UUID $eventUuid
-     * @param DateTime $eventPublished
+     * @param UUID $eventCdbid
+     * @param \DateTimeInterface $publishedDateTime
      */
-    public function publishStatus(
-        UUID $eventUuid,
-        DateTime $eventPublished
+    public function savePublished(
+        UUID $eventCdbid,
+        \DateTimeInterface $publishedDateTime
     );
 }

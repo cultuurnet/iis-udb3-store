@@ -3,7 +3,6 @@
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\Stores\LoggingRepositoryInterface;
-use ValueObjects\DateTime\DateTime;
 use ValueObjects\Identity\UUID;
 
 class StoreLoggingDBALRepository extends AbstractDBALRepository implements LoggingRepositoryInterface
@@ -11,19 +10,19 @@ class StoreLoggingDBALRepository extends AbstractDBALRepository implements Loggi
     /**
      * @inheritdoc
      */
-    public function saveStatus(
-        UUID $eventUuid,
-        DateTime $eventCreated
+    public function saveCreated(
+        UUID $eventCdbid,
+        \DateTimeInterface $createdDateTime
     ) {
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->insert($this->getTableName()->toNative())
             ->values([
-                SchemaLogConfigurator::UUID_COLUMN => '?',
+                SchemaLogConfigurator::CDBID_COLUMN => '?',
                 SchemaLogConfigurator::CREATE_COLUMN => '?',
             ])
             ->setParameters([
-                $eventUuid,
-                $eventCreated->toNativeDateTime(),
+                $eventCdbid,
+                $this->toDateTimeString($createdDateTime),
             ]);
 
         $queryBuilder->execute();
@@ -32,32 +31,51 @@ class StoreLoggingDBALRepository extends AbstractDBALRepository implements Loggi
     /**
      * @inheritdoc
      */
-    public function updateStatus(
-        UUID $eventUuid,
-        DateTime $eventUpdated
+    public function saveUpdated(
+        UUID $eventCdbid,
+        \DateTimeInterface $updatedDateTime
     ) {
-        $expr = $this->getConnection()->getExpressionBuilder();
+        $queryBuilder = $this->createQueryBuilder();
+        $queryBuilder->insert($this->getTableName()->toNative())
+            ->values([
+                SchemaLogConfigurator::CDBID_COLUMN => '?',
+                SchemaLogConfigurator::UPDATED_COLUMN => '?',
+            ])
+            ->setParameters([
+                $eventCdbid,
+                $this->toDateTimeString($updatedDateTime),
+            ]);
 
-        $queryBuilder->update($this->getTableName()->toNative())
-            ->where($expr->eq(SchemaLogConfigurator::UUID_COLUMN, ':cdbid'))
-            ->set(SchemaLogConfigurator::UPDATED_COLUMN, ':updated')
-            ->setParameter('updated', $eventUpdated);
         $queryBuilder->execute();
     }
 
     /**
      * @inheritdoc
      */
-    public function publishStatus(
-        UUID $eventUuid,
-        DateTime $eventPublished
+    public function savePublished(
+        UUID $eventCdbid,
+        \DateTimeInterface $publishedDateTime
     ) {
-        $expr = $this->getConnection()->getExpressionBuilder();
+        $queryBuilder = $this->createQueryBuilder();
+        $queryBuilder->insert($this->getTableName()->toNative())
+            ->values([
+                SchemaLogConfigurator::CDBID_COLUMN => '?',
+                SchemaLogConfigurator::PUBLISHED_COLUMN => '?',
+            ])
+            ->setParameters([
+                $eventCdbid,
+                $this->toDateTimeString($publishedDateTime),
+            ]);
 
-        $queryBuilder->update($this->getTableName()->toNative())
-            ->where($expr->eq(SchemaLogConfigurator::UUID_COLUMN, ':cdbid'))
-            ->set(SchemaLogConfigurator::PUBLISHED_COLUMN, ':published')
-            ->setParameter('published', $eventPublished);
         $queryBuilder->execute();
+    }
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     * @return string
+     */
+    private function toDateTimeString(\DateTimeInterface $dateTime)
+    {
+        return $dateTime->format(\DateTime::ATOM);
     }
 }

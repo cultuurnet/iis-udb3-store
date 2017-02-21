@@ -9,7 +9,7 @@ use ValueObjects\StringLiteral\StringLiteral;
 
 class SchemaLogConfigurator implements SchemaConfiguratorInterface
 {
-    const UUID_COLUMN = 'cdbid';
+    const CDBID_COLUMN = 'cdbid';
     const CREATE_COLUMN = 'created';
     const UPDATED_COLUMN = 'updated';
     const PUBLISHED_COLUMN = 'published';
@@ -34,7 +34,7 @@ class SchemaLogConfigurator implements SchemaConfiguratorInterface
         $schema = $schemaManager->createSchema();
         $table = $schema->createTable($this->tableName->toNative());
 
-        $table->addColumn(self::UUID_COLUMN, Type::GUID)
+        $table->addColumn(self::CDBID_COLUMN, Type::GUID)
             ->setLength(36)
             ->setNotnull(true);
         $table->addColumn(self::CREATE_COLUMN, Type::DATETIME)
@@ -44,7 +44,7 @@ class SchemaLogConfigurator implements SchemaConfiguratorInterface
         $table->addColumn(self::PUBLISHED_COLUMN, Type::DATETIME)
             ->setNotnull(false);
 
-        $table->addIndex([self::UUID_COLUMN]);
+        $table->addIndex([self::CDBID_COLUMN]);
 
         $schemaManager->createTable($table);
     }

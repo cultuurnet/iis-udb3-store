@@ -122,4 +122,49 @@ class StoreRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($eventXml, $actualEventXml);
     }
+
+    /**
+     * @test
+     */
+    public function it_delegates_save_created_to_logging_repository()
+    {
+        $eventCdbid = new UUID();
+        $createdDateTime = new \DateTime();
+
+        $this->loggingRepository->expects($this->once())
+            ->method('saveCreated')
+            ->with($eventCdbid, $createdDateTime);
+
+        $this->loggingRepository->saveCreated($eventCdbid, $createdDateTime);
+    }
+
+    /**
+     * @test
+     */
+    public function it_delegates_save_updated_to_logging_repository()
+    {
+        $eventCdbid = new UUID();
+        $updatedDateTime = new \DateTime();
+
+        $this->loggingRepository->expects($this->once())
+            ->method('saveUpdated')
+            ->with($eventCdbid, $updatedDateTime);
+
+        $this->loggingRepository->saveUpdated($eventCdbid, $updatedDateTime);
+    }
+
+    /**
+     * @test
+     */
+    public function it_delegates_save_published_to_logging_repository()
+    {
+        $eventCdbid = new UUID();
+        $publishedDateTime = new \DateTime();
+
+        $this->loggingRepository->expects($this->once())
+            ->method('savePublished')
+            ->with($eventCdbid, $publishedDateTime);
+
+        $this->loggingRepository->savePublished($eventCdbid, $publishedDateTime);
+    }
 }

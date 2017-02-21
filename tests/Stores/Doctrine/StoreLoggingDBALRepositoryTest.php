@@ -3,11 +3,6 @@
 namespace CultuurNet\UDB3\IISStore\Stores\Doctrine;
 
 use CultuurNet\UDB3\IISStore\DBALTestConnectionTrait;
-use ValueObjects\DateTime\Date;
-use ValueObjects\DateTime\DateTime;
-use ValueObjects\DateTime\Month;
-use ValueObjects\DateTime\MonthDay;
-use ValueObjects\DateTime\Year;
 use ValueObjects\Identity\UUID;
 use \ValueObjects\StringLiteral\StringLiteral;
 
@@ -23,20 +18,20 @@ class StoreLoggingDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var UUID
      */
-    private $cdbid;
+    private $eventCdbid;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     private $eventCreated;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     private $eventUpdated;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     private $eventPublished;
 
@@ -44,18 +39,6 @@ class StoreLoggingDBALRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var StoreLoggingDBALRepository
      */
     private $storeLoggingDBALRepository;
-
-    /**
-     * @param int $yearsToSubtract
-     * @return Date
-     */
-    private function getPreviousDate($yearsToSubtract)
-    {
-        $year = new Year(2016 - $yearsToSubtract);
-        $month = Month::now();
-        $monthDay = new MonthDay(6);
-        return new Date($year, $month, $monthDay);
-    }
 
     protected function setUp()
     {
@@ -65,11 +48,11 @@ class StoreLoggingDBALRepositoryTest extends \PHPUnit_Framework_TestCase
         $schemaManager = $this->getConnection()->getSchemaManager();
         $schemaConfigurator->configure($schemaManager);
 
-        $this->cdbid = new UUID();
+        $this->eventCdbid = new UUID();
 
-        $this->eventCreated = new DateTime($this->getPreviousDate(3));
-        $this->eventUpdated = new DateTime($this->getPreviousDate(2));
-        $this->eventPublished = new DateTime($this->getPreviousDate(1));
+        $this->eventCreated = new \DateTime('2017-01-01T12:00:00');
+        $this->eventUpdated = new \DateTime('2017-01-02T12:00:00');
+        $this->eventPublished = new \DateTime('2017-01-03T12:00:00');
 
         $this->storeLoggingDBALRepository = new StoreLoggingDBALRepository(
             $this->getConnection(),
@@ -80,28 +63,67 @@ class StoreLoggingDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_stores_a_status()
+    public function it_can_save_created_status()
     {
-//        $this->storeLoggingDBALRepository->storeStatus(
-//            $this->cdbid,
-//            $this->eventCreated,
-//            $this->eventUpdated,
-//            $this->eventPublished
-//        );
+        $this->storeLoggingDBALRepository->saveCreated(
+            $this->eventCdbid,
+            $this->eventCreated
+        );
 
-        //$storedStatus = $this->getStoredStatus();
+        $storedRow = $this->getStoredRow();
+
+        $this->assertEquals(
+            $this->eventCreated,
+            new \DateTime($storedRow[SchemaLogConfigurator::CREATE_COLUMN])
+        );
     }
 
     /**
-     * @return mixed
+     * @test
      */
-    protected function getStoredStatus()
+    public function it_can_save_updated_status()
+    {
+        $this->storeLoggingDBALRepository->saveUpdated(
+            $this->eventCdbid,
+            $this->eventUpdated
+        );
+
+        $storedRow = $this->getStoredRow();
+
+        $this->assertEquals(
+            $this->eventUpdated,
+            new \DateTime($storedRow[SchemaLogConfigurator::UPDATED_COLUMN])
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_save_published_status()
+    {
+        $this->storeLoggingDBALRepository->savePublished(
+            $this->eventCdbid,
+            $this->eventPublished
+        );
+
+        $storedRow = $this->getStoredRow();
+
+        $this->assertEquals(
+            $this->eventPublished,
+            new \DateTime($storedRow[SchemaLogConfigurator::PUBLISHED_COLUMN])
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getStoredRow()
     {
         $sql = 'SELECT * FROM ' . $this->tableName;
 
         $statement = $this->connection->executeQuery($sql);
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        return $row[1];
+        return $row;
     }
 }
