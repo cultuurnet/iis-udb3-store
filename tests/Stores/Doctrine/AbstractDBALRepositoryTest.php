@@ -6,7 +6,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
 use ValueObjects\StringLiteral\StringLiteral;
 
-abstract class AbstractDBALRepositoryTest extends \PHPUnit_Framework_TestCase
+class AbstractDBALRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Connection
