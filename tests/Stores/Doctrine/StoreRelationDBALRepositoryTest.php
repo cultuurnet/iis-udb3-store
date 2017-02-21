@@ -121,6 +121,18 @@ class StoreRelationDBALRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function it_returns_null_for_relations_of_unknown_event_cdbid()
+    {
+        $actualEventCdbid = $this->storeRelationDBALRepository->getEventCdbid(
+            new StringLiteral('CDB:OtherExample')
+        );
+
+        $this->assertNull($actualEventCdbid);
+    }
+
+    /**
      * @return mixed
      */
     protected function getStoredRelation()
