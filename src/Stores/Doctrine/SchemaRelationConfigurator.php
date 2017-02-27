@@ -36,7 +36,8 @@ class SchemaRelationConfigurator implements SchemaConfiguratorInterface
         $table->addColumn(self::CDBID_COLUMN, Type::GUID)
             ->setLength(36)
             ->setNotnull(true);
-        $table->addColumn(self::EXTERNAL_ID_COLUMN, Type::TEXT)
+        $table->addColumn(self::EXTERNAL_ID_COLUMN, Type::STRING)
+            ->setLength(128)
             ->setNotnull(true);
 
         $table->addUniqueIndex([self::CDBID_COLUMN]);
