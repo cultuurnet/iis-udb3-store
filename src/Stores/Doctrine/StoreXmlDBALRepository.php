@@ -40,11 +40,12 @@ class StoreXmlDBALRepository extends AbstractDBALRepository implements XmlReposi
         $queryBuilder->update($this->getTableName()->toNative())
             ->set(
                 SchemaXmlConfigurator::XML_COLUMN,
-                $queryBuilder->expr()->literal($eventXml->toNative())
+                ':cdbxml'
             )
             ->where($whereId)
             ->setParameters([
                 SchemaXmlConfigurator::CDBID_COLUMN => $eventUuid->toNative(),
+                SchemaXmlConfigurator::XML_COLUMN => $eventXml->toNative()
             ]);
 
         $queryBuilder->execute();
