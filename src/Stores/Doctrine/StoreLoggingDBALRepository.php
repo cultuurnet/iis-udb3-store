@@ -76,6 +76,6 @@ class StoreLoggingDBALRepository extends AbstractDBALRepository implements Loggi
      */
     private function toDateTimeString(\DateTimeInterface $dateTime)
     {
-        return $dateTime->format(\DateTime::ATOM);
+        return $dateTime->format('Y-m-d H:i:s');
     }
 }
