@@ -5,6 +5,7 @@
     "license": "Apache-2.0",
     "authors": [],
     "require": {
+        "php": ">=7.1",
         "doctrine/dbal": "^2.5",
         "doctrine/migrations": "^1.4",
         "cultuurnet/valueobjects": "~3.0"
